@@ -16,7 +16,7 @@ DSMGA-II is an advanced evolutionary algorithm that excels at solving complex op
 ## Installation
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/DSMGA-II-TwoEdge.git
+git clone https://github.com/PoHsuanLai/DSMGA-II-TwoEdge.git
 
 # Build the project
 cd DSMGA-II-TwoEdge
@@ -29,12 +29,43 @@ pip install -e .
 ```
 
 ## Usage
+
+### Using Predefined Fitness Functions
 ```python
-# Python example
+import dsmga2
+
+# Create optimizer with a predefined fitness function
+optimizer = dsmga2.DSMGA2(
+    problem_size=100,
+    population_size=100,
+    max_generations=1000,
+    fitness_type="onemax"  # Use predefined OneMax function
+)
+
+# Run optimization
+solution, fitness = optimizer.optimize()
+print(f"Solution: {solution}")
+print(f"Fitness: {fitness}")
+```
+
+Available predefined fitness functions:
+- `"onemax"`: Counts the number of ones in the bit string
+- `"mktrap"`: MK Trap function
+- `"ftrap"`: Folded Trap function
+- `"cyctrap"`: Cyclic Trap function
+- `"nk"`: NK Landscapes
+- `"sat"`: Boolean Satisfiability Problem
+- `"custom"`: For user-defined objective functions
+
+### Using Custom Objective Function
+```python
 import dsmga2
 
 # Create optimizer
-optimizer = dsmga2.DSMGA2(problem_size=100)
+optimizer = dsmga2.DSMGA2(
+    problem_size=100,
+    fitness_type="custom"
+)
 
 # Set custom objective function
 def objective_function(x):
