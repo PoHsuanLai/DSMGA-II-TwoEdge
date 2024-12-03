@@ -12,6 +12,7 @@ DSMGA-II is an advanced evolutionary algorithm that excels at solving complex op
 - Improved scalability compared to traditional genetic algorithms
 - Support for various benchmark problems
 - Python bindings for easy integration
+- SciPy-like interface for continuous optimization problems
 
 ## Installation
 ```bash
@@ -30,12 +31,16 @@ pip install -e .
 
 ## Usage
 
-### Using Predefined Fitness Functions
+There are two ways to use this library:
+
+### 1. Class-based Interface (For Predefined Fitness Functions)
+Use this approach when working with predefined binary optimization problems:
+
 ```python
-import dsmga2
+from dsmga2 import DSMGA2
 
 # Create optimizer with a predefined fitness function
-optimizer = dsmga2.DSMGA2(
+optimizer = DSMGA2(
     problem_size=100,
     population_size=100,
     max_generations=1000,
@@ -46,6 +51,14 @@ optimizer = dsmga2.DSMGA2(
 solution, fitness = optimizer.optimize()
 print(f"Solution: {solution}")
 print(f"Fitness: {fitness}")
+
+# Find optimal population size
+result = optimizer.sweep(
+    min_pop=20,
+    max_pop=200,
+    step_size=20
+)
+print(f"Optimal population size: {result['optimal_population']}")
 ```
 
 Available predefined fitness functions:
@@ -57,12 +70,48 @@ Available predefined fitness functions:
 - `"sat"`: Boolean Satisfiability Problem
 - `"custom"`: For user-defined objective functions
 
-### Using Custom Objective Function
+### 2. Standalone Functions (For Continuous Optimization)
+Use this approach when working with continuous optimization problems, similar to SciPy's optimize interface:
+
 ```python
-import dsmga2
+from dsmga2 import dsmga2, sweep
+import numpy as np
+
+# Define objective function
+def rosenbrock(x):
+    return sum(100.0 * (x[1:] - x[:-1]**2.0)**2.0 + (1 - x[:-1])**2.0)
+
+# Define bounds for each variable
+bounds = [(-5.12, 5.12)] * 10  # 10 variables, each bounded [-5.12, 5.12]
+
+# Run optimization
+result = dsmga2(rosenbrock, bounds, 
+                popsize=100,
+                maxiter=1000,
+                disp=True)
+
+print(f"Solution: {result['x']}")
+print(f"Objective value: {result['fun']}")
+
+# Find optimal parameters
+sweep_result = sweep(rosenbrock, bounds,
+                    min_pop=20,
+                    max_pop=200,
+                    step_size=20,
+                    maxiter=1000,
+                    disp=True)
+
+print(f"Optimal population size: {sweep_result['optimal_population']}")
+```
+
+### Using Custom Binary Objective Function
+When using the class-based interface with a custom binary objective function:
+
+```python
+from dsmga2 import DSMGA2
 
 # Create optimizer
-optimizer = dsmga2.DSMGA2(
+optimizer = DSMGA2(
     problem_size=100,
     fitness_type="custom"
 )

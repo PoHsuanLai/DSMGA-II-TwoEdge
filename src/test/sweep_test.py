@@ -4,7 +4,7 @@ DSMGA-II Parameter Sweep Test
 Using the sweep algorithm to find optimal parameters for different problem types.
 """
 
-from dsmga2 import Sweep
+from dsmga2 import DSMGA2
 import time
 from tabulate import tabulate
 import matplotlib.pyplot as plt
@@ -20,29 +20,33 @@ def test_with_sweep(problem_size=100, num_convergence=10):
         print("=" * 50)
         
         try:
-            # Create sweep instance
-            sweep = Sweep(
+            # Create optimizer instance with the specific fitness type
+            optimizer = DSMGA2(
                 problem_size=problem_size,
-                num_convergence=num_convergence,
-                fitness_type=fitness_type
+                fitness_type=fitness_type,
+                max_generations=1000
             )
             
-            # Run sweep
+            # Run sweep directly on the optimizer instance
             start_time = time.time()
-            population, generations, nfe = sweep.run_sweep()
+            result = optimizer.sweep(
+                min_pop=20,
+                max_pop=200,
+                step_size=20
+            )
             elapsed_time = time.time() - start_time
             
             results[fitness_type] = {
-                'population': population,
-                'generations': generations,
-                'nfe': nfe,
+                'population': result['optimal_population'],
+                'generations': result['generations'],
+                'nfe': result['nfe'],
                 'time': elapsed_time
             }
             
             print(f"\nResults for {fitness_type.upper()}:")
-            print(f"Optimal Population Size: {population}")
-            print(f"Average Generations: {generations:.2f}")
-            print(f"Average NFE: {nfe:.2f}")
+            print(f"Optimal Population Size: {result['optimal_population']}")
+            print(f"Generations: {result['generations']}")
+            print(f"NFE: {result['nfe']}")
             print(f"Time taken: {elapsed_time:.2f}s")
             
         except Exception as e:
@@ -69,7 +73,7 @@ def print_results_table(results):
 
 if __name__ == "__main__":
     # Test with different problem sizes
-    problem_sizes = [100, 200, 500, 1000]
+    problem_sizes = [10, 20, 50, 100]
     all_results = {}
     
     for size in problem_sizes:

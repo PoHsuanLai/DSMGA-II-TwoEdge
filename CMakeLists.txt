@@ -52,20 +52,18 @@ add_executable(DSMGA2
     src/core/main.cpp
 )
 
-add_executable(sweep
-    ${COMMON_SOURCES}
-    src/core/sweep.cpp
-)
-
 add_executable(genZobrist
     src/utils/genZobrist.cpp
 )
 
+# Set Python module output directory
+set(PYTHON_MODULE_DIR ${CMAKE_SOURCE_DIR}/python/dsmga2)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PYTHON_MODULE_DIR})
+
 # Python module
-pybind11_add_module(dsmga2 
+pybind19_add_module(dsmga2 
     src/python_binding/ga_wrapper.cpp
     ${COMMON_SOURCES}
-    src/core/sweep.cpp
 )
 
 target_include_directories(dsmga2 PRIVATE
@@ -79,7 +77,6 @@ target_include_directories(dsmga2 PRIVATE
 find_library(MATH_LIBRARY m)
 if(MATH_LIBRARY)
     target_link_libraries(DSMGA2 PRIVATE ${MATH_LIBRARY})
-    target_link_libraries(sweep PRIVATE ${MATH_LIBRARY})
     target_link_libraries(genZobrist PRIVATE ${MATH_LIBRARY})
 endif()
 
