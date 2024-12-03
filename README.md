@@ -39,26 +39,29 @@ Use this approach when working with predefined binary optimization problems:
 ```python
 from dsmga2 import DSMGA2
 
-# Create optimizer with a predefined fitness function
+# Create optimizer with minimal parameters
 optimizer = DSMGA2(
-    problem_size=100,
-    population_size=100,
-    max_generations=1000,
-    fitness_type="onemax"  # Use predefined OneMax function
+    problem_size=100,  # Required
+    fitness_type="onemax"  # Optional, defaults to "custom"
+    # Optional parameters with defaults:
+    # population_size=100
+    # max_generations=1000
+    # max_evaluations=-1
 )
 
 # Run optimization
 solution, fitness = optimizer.optimize()
-print(f"Solution: {solution}")
-print(f"Fitness: {fitness}")
 
-# Find optimal population size
+# Find optimal population size (all parameters optional)
 result = optimizer.sweep(
-    min_pop=20,
-    max_pop=200,
-    step_size=20
+    # min_pop=10
+    # max_pop=200
+    # step_size=30
 )
 print(f"Optimal population size: {result['optimal_population']}")
+print(f"Generations needed: {result['generations']}")
+print(f"Number of fitness evaluations: {result['nfe']}")
+print(f"Time taken: {result['time']}")
 ```
 
 Available predefined fitness functions:
@@ -71,7 +74,7 @@ Available predefined fitness functions:
 - `"custom"`: For user-defined objective functions
 
 ### 2. Standalone Functions (For Continuous Optimization)
-Use this approach when working with continuous optimization problems, similar to SciPy's optimize interface:
+Use this approach when working with continuous optimization problems:
 
 ```python
 from dsmga2 import dsmga2, sweep
@@ -82,26 +85,26 @@ def rosenbrock(x):
     return sum(100.0 * (x[1:] - x[:-1]**2.0)**2.0 + (1 - x[:-1])**2.0)
 
 # Define bounds for each variable
-bounds = [(-5.12, 5.12)] * 10  # 10 variables, each bounded [-5.12, 5.12]
+bounds = [(-5.12, 5.12)] * 10
 
-# Run optimization
+# Run optimization (all parameters optional except function and bounds)
 result = dsmga2(rosenbrock, bounds, 
-                popsize=100,
-                maxiter=1000,
-                disp=True)
+                # popsize=15 * len(bounds)  # Default: 15 times problem dimension
+                # maxiter=1000
+                # disp=False
+)
 
 print(f"Solution: {result['x']}")
 print(f"Objective value: {result['fun']}")
 
-# Find optimal parameters
+# Find optimal parameters (all parameters optional except function and bounds)
 sweep_result = sweep(rosenbrock, bounds,
-                    min_pop=20,
-                    max_pop=200,
-                    step_size=20,
-                    maxiter=1000,
-                    disp=True)
-
-print(f"Optimal population size: {sweep_result['optimal_population']}")
+                    # min_pop=10
+                    # max_pop=200
+                    # step_size=30
+                    # maxiter=1000
+                    # disp=False
+)
 ```
 
 ### Using Custom Binary Objective Function
@@ -110,10 +113,13 @@ When using the class-based interface with a custom binary objective function:
 ```python
 from dsmga2 import DSMGA2
 
-# Create optimizer
+# Create optimizer (only problem_size required)
 optimizer = DSMGA2(
     problem_size=100,
-    fitness_type="custom"
+    # fitness_type="custom"  # Default
+    # population_size=100    # Default
+    # max_generations=1000   # Default
+    # max_evaluations=-1     # Default
 )
 
 # Set custom objective function
