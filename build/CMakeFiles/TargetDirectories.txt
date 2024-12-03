@@ -1,0 +1,8 @@
+/Users/santaclaus/Documents/GA/DSMGA-II-TwoEdge/build/CMakeFiles/DSMGA2.dir
+/Users/santaclaus/Documents/GA/DSMGA-II-TwoEdge/build/CMakeFiles/sweep.dir
+/Users/santaclaus/Documents/GA/DSMGA-II-TwoEdge/build/CMakeFiles/genZobrist.dir
+/Users/santaclaus/Documents/GA/DSMGA-II-TwoEdge/build/CMakeFiles/dsmga2.dir
+/Users/santaclaus/Documents/GA/DSMGA-II-TwoEdge/build/CMakeFiles/edit_cache.dir
+/Users/santaclaus/Documents/GA/DSMGA-II-TwoEdge/build/CMakeFiles/rebuild_cache.dir
+/Users/santaclaus/Documents/GA/DSMGA-II-TwoEdge/build/pybind11/CMakeFiles/edit_cache.dir
+/Users/santaclaus/Documents/GA/DSMGA-II-TwoEdge/build/pybind11/CMakeFiles/rebuild_cache.dir

@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+*.eggs/
+*.vscode/
+
+bin/*
+!bin/zobristkey
+
+*.png
